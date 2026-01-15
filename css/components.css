@@ -139,6 +139,29 @@
     justify-content: space-between;
     align-items: center;
     background-color: var(--bg-panel);
+    position: relative;
+    /* For absolute centering option, though flex is used */
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    /* Let clicks pass through if it overlaps bits of buttons */
+    max-width: 40%;
+}
+
+.file-name-display {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .panel-actions {

@@ -8,6 +8,10 @@ class UIController {
         this.textB = document.getElementById('text-b');
         this.countA = document.getElementById('count-a');
         this.countB = document.getElementById('count-b');
+        this.fileNameA = document.getElementById('file-name-a');
+        this.fileNameB = document.getElementById('file-name-b');
+        this.currentFileNames = { a: null, b: null }; // Track current filenames
+        this.isFileModified = { a: false, b: false };   // Track modification state
         this.diffOutput = document.getElementById('diff-output');
         this.loadingBar = document.getElementById('loading-bar');
         this.diffStats = document.getElementById('diff-stats');
@@ -228,6 +232,9 @@ class UIController {
 
                 this.readFileContent(file, (text) => {
                     target.value = text;
+                    // Update Filename Display
+                    this.setFileName(idx === 0 ? 'a' : 'b', file.name);
+
                     if (this.onInputCallback) this.onInputCallback();
                 });
                 e.target.value = ''; // Reset input
@@ -264,6 +271,10 @@ class UIController {
                 if (e.dataTransfer.files.length > 0) {
                     this.readFileContent(e.dataTransfer.files[0], (text) => {
                         target.value = text;
+                        // Determine which panel triggered the drop to set filename correctly
+                        const panel = target.id === 'text-a' ? 'a' : 'b';
+                        this.setFileName(panel, e.dataTransfer.files[0].name);
+
                         if (this.onInputCallback) this.onInputCallback();
                     });
                 }
@@ -434,6 +445,45 @@ class UIController {
     }
 
     // =========================================
+    // File Name Display Helpers
+    // =========================================
+
+    truncateFileName(name) {
+        if (!name) return '';
+        const MAX_LEN = 10; // Trigger truncation if longer than this
+        if (name.length <= MAX_LEN) return name;
+
+        // Strategy: First 5 chars ... Last 8 chars
+        // Example: 12345...vwxyz.txt
+        const start = name.substring(0, 5);
+        const end = name.substring(name.length - 8);
+        return `${start}......${end}`;
+    }
+
+    setFileName(panel, name) {
+        // panel: 'a' or 'b'
+        this.currentFileNames[panel] = name;
+        this.isFileModified[panel] = false; // Reset modified state on new file load
+
+        const el = panel === 'a' ? this.fileNameA : this.fileNameB;
+        if (el) {
+            el.textContent = this.truncateFileName(name);
+            el.title = name; // Tooltip with full name
+        }
+    }
+
+    markAsModified(panel) {
+        if (!this.currentFileNames[panel]) return; // No file loaded, ignore
+        if (this.isFileModified[panel]) return; // Already marked
+
+        this.isFileModified[panel] = true;
+        const el = panel === 'a' ? this.fileNameA : this.fileNameB;
+        if (el) {
+            el.textContent = `${this.truncateFileName(this.currentFileNames[panel])} (Modified)`;
+        }
+    }
+
+    // =========================================
     // Input & Binding Helpers
     // =========================================
 
@@ -457,7 +507,13 @@ class UIController {
 
     bindInput(callback) {
         this.onInputCallback = callback;
-        this.textA.addEventListener('input', callback);
-        this.textB.addEventListener('input', callback);
+        this.textA.addEventListener('input', (e) => {
+            this.markAsModified('a');
+            if (callback) callback(e);
+        });
+        this.textB.addEventListener('input', (e) => {
+            this.markAsModified('b');
+            if (callback) callback(e);
+        });
     }
 }
