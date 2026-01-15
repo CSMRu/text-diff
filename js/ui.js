@@ -426,7 +426,7 @@ class UIController {
             <span style="opacity: 0.5; margin: 0 4px;">(</span> 
             <span style="color: var(--diff-add-text);">+${added} ${getUnit(added)}</span> 
             <span style="opacity: 0.5; margin: 0 2px;">&nbsp;</span> 
-            <span style="color: var(--diff-del-text);">${removed} ${getUnit(removed)}</span> 
+            <span style="color: var(--diff-del-text);">-${removed} ${getUnit(removed)}</span> 
             <span style="opacity: 0.5; margin: 0 4px;">)</span> 
             <span class="stat-divider">|</span> 
             ${lines} ${getLineUnit(lines)} modified
