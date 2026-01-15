@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="notranslate">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>text diff</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- Lucide Icons (Local) -->
+    <script src="lib/lucide.min.js"></script>
+    <!-- Diff Match Patch (Local) -->
+    <script src="lib/diff_match_patch.js"></script>
+</head>
+
+<body>
+    <div id="loading-bar" class="loading-bar"></div>
+    <header class="toolbar">
+        <div class="brand">
+            <h1>text <span class="text-highlight">d</span>iff <span class="version-tag">v26.0114d</span></h1>
+        </div>
+
+        <div class="controls">
+            <!-- Font Control -->
+            <div class="font-control-group">
+                <button id="font-decrease" class="btn-text" title="Decrease Font Size">
+                    <span style="font-size: 10px; font-weight: bold;">A-</span>
+                </button>
+                <span id="font-size-display">12pt</span>
+                <button id="font-increase" class="btn-text" title="Increase Font Size">
+                    <span style="font-size: 14px; font-weight: bold;">A+</span>
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Theme Toggle -->
+            <button class="btn btn-icon btn-sm" id="btn-theme" title="Toggle Theme">
+                <i data-lucide="moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="diff-container" id="main-container">
+        <!-- Input Group (Left Column by default) -->
+        <div class="panel-group inputs">
+            <div class="panel input-panel">
+                <div class="panel-header">
+                    <div class="header-left">
+                        <span>Input <span class="text-highlight">A</span></span>
+                        <input type="file" id="upload-a" hidden>
+                        <button class="btn btn-sm" onclick="document.getElementById('upload-a').click()"
+                            title="Upload File">
+                            <i data-lucide="upload"></i>
+                        </button>
+                    </div>
+                    <div class="header-actions">
+                        <span class="char-count" id="count-a">0 chars</span>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <textarea id="text-a" placeholder="Enter text, drop file, or upload file A..."></textarea>
+                    <!-- Drag & Drop Overlay -->
+                    <div class="drop-overlay">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="drop-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                        </svg>
+                        <span class="drop-text">Drop File Here</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel input-panel">
+                <div class="panel-header">
+                    <div class="header-left">
+                        <span>Input <span class="text-highlight">B</span></span>
+                        <input type="file" id="upload-b" hidden>
+                        <button class="btn btn-sm" onclick="document.getElementById('upload-b').click()"
+                            title="Upload File">
+                            <i data-lucide="upload"></i>
+                        </button>
+                    </div>
+                    <div class="header-actions">
+                        <span class="char-count" id="count-b">0 chars</span>
+                    </div>
+                </div>
+                <div class="input-wrapper">
+                    <textarea id="text-b" placeholder="Enter text, drop file, or upload file B..."></textarea>
+                    <!-- Drag & Drop Overlay -->
+                    <div class="drop-overlay">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="drop-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                        </svg>
+                        <span class="drop-text">Drop File Here</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Group (Right Column by default) -->
+        <div class="panel output-panel">
+            <div class="panel-header">
+                <div class="header-left">
+                    <span><span style="color: var(--primary);">d</span>iff</span>
+                    <div class="panel-actions">
+                        <button class="btn" id="btn-ignore-enter">
+                            <i data-lucide="corner-down-left"></i>
+                            <span>Ignore Enter</span>
+                        </button>
+                        <button class="btn" id="btn-view-only-diff">
+                            <i data-lucide="filter"></i>
+                            <span>View Only diff</span>
+                        </button>
+                        <div class="diff-stats" id="diff-stats"></div>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <div class="legend">
+                        <span class="legend-item add">Added</span>
+                        <span class="legend-item del">Removed</span>
+                    </div>
+                </div>
+            </div>
+            <div id="diff-output" class="diff-content"></div>
+            <div id="load-more-container" class="load-more-container" style="display: none;">
+                <button id="btn-load-more" class="btn btn-primary">
+                    <i data-lucide="arrow-down-circle"></i>
+                    <span>Load More (Large File)</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scroll Buttons -->
+    <div class="scroll-buttons">
+        <button id="btn-scroll-top" class="btn-scroll" title="Scroll to Top (↑ / W)">
+            <i data-lucide="arrow-up"></i>
+        </button>
+        <button id="btn-prev-change" class="btn-scroll" title="Previous Change (← / A)">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <button id="btn-next-change" class="btn-scroll" title="Next Change (→ / D)">
+            <i data-lucide="arrow-right"></i>
+        </button>
+        <button id="btn-scroll-bottom" class="btn-scroll" title="Scroll to Bottom (↓ / S)">
+            <i data-lucide="arrow-down"></i>
+        </button>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Core Modules (Loaded sequentially for file:// compatibility) -->
+    <script src="js/config.js"></script>
+    <script src="js/shared-utils.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/worker-manager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
