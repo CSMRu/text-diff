@@ -269,11 +269,12 @@ class UIController {
                 dragCounter = 0;
                 el.classList.remove('drag-active');
                 if (e.dataTransfer.files.length > 0) {
-                    this.readFileContent(e.dataTransfer.files[0], (text) => {
+                    const file = e.dataTransfer.files[0];
+                    this.readFileContent(file, (text) => {
                         target.value = text;
                         // Determine which panel triggered the drop to set filename correctly
                         const panel = target.id === 'text-a' ? 'a' : 'b';
-                        this.setFileName(panel, e.dataTransfer.files[0].name);
+                        this.setFileName(panel, file.name);
 
                         if (this.onInputCallback) this.onInputCallback();
                     });
@@ -380,25 +381,37 @@ class UIController {
     validateFile(file) {
         if (!file) return false;
 
-        // Reject media files
-        if (file.type.match(/^(image|video|audio)\//)) {
-            this.showToast("Images and media files are not supported.", "error");
-            return false;
-        }
+        const ALLOWED_EXTENSIONS = [
+            'txt', 'md', 'markdown', 'json', 'js', 'jsx', 'ts', 'tsx', 'css', 'html', 'htm', 'xml', 'yaml', 'yml',
+            'csv', 'log', 'sql', 'py', 'java', 'c', 'cpp', 'h', 'cs', 'go', 'rs', 'rb', 'php', 'sh', 'bat', 'ps1',
+            'properties', 'ini', 'toml', 'gitignore', 'dockerfile'
+        ];
 
-        // Reject binary files
-        const name = file.name.toLowerCase();
-        if (name.match(/\.(exe|dll|bin|iso|msi)$/)) {
-            this.showToast("Executable and binary files are not supported.", "error");
-            return false;
-        }
-
+        // 1. Size Check
         if (file.size > MAX_FILE_SIZE) {
             this.showToast("File size exceeds 2MB limit.", "error");
             return false;
         }
 
-        return true;
+        // 2. Extension Check
+        const name = file.name.toLowerCase();
+        // Handle files without extension (like LICENSE, Dockerfile, etc.) or just verify extension
+        const parts = name.split('.');
+        const ext = parts.length > 1 ? parts.pop() : '';
+
+        // Allow if extension is in whitelist
+        if (ALLOWED_EXTENSIONS.includes(ext)) {
+            return true;
+        }
+
+        // 3. Fallback: Allow if specifically text/plain (handles some no-extension files like LICENSE)
+        // or if filename indicates a known config file without standard extension
+        if (parts.length === 1 && (file.type === 'text/plain' || ['license', 'makefile'].includes(name))) {
+            return true;
+        }
+
+        this.showToast(`File type not supported (${ext || 'unknown'}).`, "error");
+        return false;
     }
 
     // =========================================
