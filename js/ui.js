@@ -31,6 +31,7 @@ class UIController {
         this.initScrollButtons();
         this.initDragAndDrop();
         this.initFileUploads();
+        this.initVersionDisplay();
 
         // Initialize Icons
         if (window.lucide) lucide.createIcons();
@@ -235,11 +236,21 @@ class UIController {
                     // Update Filename Display
                     this.setFileName(idx === 0 ? 'a' : 'b', file.name);
 
-                    if (this.onInputCallback) this.onInputCallback();
+                    // FORCE UPDATE (pass true) to skip debounce and show result immediately
+                    if (this.onInputCallback) this.onInputCallback(true);
                 });
                 e.target.value = ''; // Reset input
             });
         });
+    }
+
+    initVersionDisplay() {
+        if (typeof APP_VERSION !== 'undefined') {
+            const versionEl = document.getElementById('app-version');
+            if (versionEl) {
+                versionEl.textContent = APP_VERSION;
+            }
+        }
     }
 
     initDragAndDrop() {
