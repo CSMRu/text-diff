@@ -1,9 +1,7 @@
 # Text Diff (한국어)
-| <div align="center"> <a href="https://csmru.github.io/text-diff/"><img src="favicon.svg" width="64"></a> <br> [![Version](https://img.shields.io/badge/Version-26.0126a-ffc8c8)](https://github.com/csmru/text-diff/commits) [![Hosted on GitHub Pages](https://img.shields.io/badge/GitHub-Pages-2b7346?logo=github)](https://csmru.github.io/text-diff/) <br> [![English](https://img.shields.io/badge/Language-English-lightgrey)](README.md) ![한국어](https://img.shields.io/badge/Language-%ED%95%9C%EA%B5%AD%EC%96%B4-2b7346) </div> |
-| :--- |
+[![Version](https://img.shields.io/badge/Version-26.0126a-ffc8c8)](https://github.com/csmru/text-diff/commits) [![Hosted on GitHub Pages](https://img.shields.io/badge/GitHub-Pages-2b7346?logo=github)](https://csmru.github.io/text-diff/) [![English](https://img.shields.io/badge/Guide-English-white?style=flat-square&logo=google-translate&logoColor=white)](README.md) [![한국어](https://img.shields.io/badge/Guide-한국어-blue?style=flat-square&logo=google-translate&logoColor=blue)](README.ko.md)
 
-
-> Vanilla JavaScript로 제작된 현대적이고 빠르며 안전한 클라이언트 사이드 텍스트 비교 도구입니다. 깔끔하고 반응형 UI를 통해 두 텍스트 입력 간의 차이점을 효율적으로 계산하고 표시합니다.
+> Vanilla JavaScript로 제작된 현대적이고 빠르며 안전한 클라이언트 사이드 텍스트 비교 도구입니다.</br>깔끔하고 반응형 UI를 통해 두 텍스트 입력 간의 차이점을 효율적으로 계산하고 표시합니다.
 
 ## 주요 기능
 
