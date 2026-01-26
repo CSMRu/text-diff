@@ -474,7 +474,7 @@ class UIController {
 
     truncateFileName(name) {
         if (!name) return '';
-        const MAX_LEN = 10; // Trigger truncation if longer than this
+        const MAX_LEN = 16; // Trigger truncation if longer than this
         if (name.length <= MAX_LEN) return name;
 
         // Strategy: First 5 chars ... Last 8 chars
