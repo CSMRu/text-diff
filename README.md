@@ -1,6 +1,7 @@
 # Text Diff
-| <div align="center"> <a href="https://csmru.github.io/text-diff/"><img src="favicon.svg" width="64"></a> <br> [![Version](https://img.shields.io/badge/Version-26.0126a-ffc8c8)](https://github.com/csmru/text-diff/commits) [![Hosted on GitHub Pages](https://img.shields.io/badge/GitHub-Pages-2b7346?logo=github)](https://csmru.github.io/text-diff/) </div> |
+| <div align="center"> <a href="https://csmru.github.io/text-diff/"><img src="favicon.svg" width="64"></a> <br> [![Version](https://img.shields.io/badge/Version-26.0126a-ffc8c8)](https://github.com/csmru/text-diff/commits) [![Hosted on GitHub Pages](https://img.shields.io/badge/GitHub-Pages-2b7346?logo=github)](https://csmru.github.io/text-diff/) <br> ![English](https://img.shields.io/badge/Language-English-2b7346) [![한국어](https://img.shields.io/badge/Language-%ED%95%9C%EA%B5%AD%EC%96%B4-lightgrey)](README.ko.md) </div> |
 | :--- |
+
 
 > A modern, fast, and secure client-side text comparison tool built with Vanilla JavaScript. Efficiently computes and displays differences between two text inputs with a clean, responsive UI.
 
@@ -12,8 +13,8 @@
 -   **🛡️ Secure & Safe**: Strict **Whitelist Validation** ensures only safe text file formats are processed.
 -   **🌗 Light & Dark Mode**: Automatic theme detection with manual toggle.
 -   **🔍 Smart Navigation**: Jump between changes easily with the D-pad or Arrow keys.
--   **↩️ Ignore Enter**: Focus on content changes by optionally ignoring newline differences.
--   **🧹 View Only diff**: Filter out unchanged text to focus solely on modifications.
+-   **↩️ Ignore Enter (Optional)**: Focus on content changes by optionally ignoring newline differences.
+-   **🧹 View Only diff (Optional)**: Filter out unchanged text to focus solely on modifications.
 
 ## Keyboard Shortcuts
 
